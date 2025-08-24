@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EduAI Assistant</title>
+</head>
+<body>
+  <h1>EduAI Assistant</h1>
+
+  <textarea id="inputText" rows="6" cols="60" placeholder="Paste your text here"></textarea><br><br>
+
+  <button id="summarizeBtn">Summarize</button>
+  <button id="quizBtn">Generate Quiz</button>
+
+  <h3>Summary:</h3>
+  <p id="summaryOutput"></p>
+
+  <h3>Quiz:</h3>
+  <p id="quizOutput"></p>
+
+  <script>
+    document.getElementById("summarizeBtn").onclick = async () => {
+      const text = document.getElementById("inputText").value;
+      if (!text) return alert("Please enter some text first!");
+      const res = await fetch("http://127.0.0.1:8000/summarize", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+      });
+      const data = await res.json();
+      document.getElementById("summaryOutput").innerText = data.summary || "No summary found";
+    };
+
+    document.getElementById("quizBtn").onclick = async () => {
+      const text = document.getElementById("inputText").value;
+      if (!text) return alert("Please enter some text first!");
+      const res = await fetch("http://127.0.0.1:8000/quiz", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+      });
+      const data = await res.json();
+      document.getElementById("quizOutput").innerText = data.quiz || "No quiz generated";
+    };
+  </script>
+</body>
+</html>
+
